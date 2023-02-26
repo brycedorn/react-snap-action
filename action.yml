@@ -1,12 +1,12 @@
-name: react-snap Action
-description: This action uses react-snap to pre-render a web application into static, hydratable HTML
+name: Server-side render (SSR) with react-snap
+description: This action uses react-snap to pre-render a web application into static, hydratable HTML.
 inputs:
   root:
     description: The root directory of your application (where package.json is)
-    required: true
-    default: example
+    required: false
+    default: .
   output:
-    description: The name of the output folder of your bundled application
+    description: The name of the output folder of your bundled application, within the above directory
     required: false
     default: dist
 branding:
