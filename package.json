@@ -1,0 +1,27 @@
+{
+  "name": "react-snap-action",
+  "version": "1.0.0",
+  "description": "This Action uses react-snap to pre-render a web app into static HTML.",
+  "main": "index.js",
+  "scripts": {
+    "snap": "react-snap"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "author": "Bryce Dorn",
+  "license": "MIT",
+  "dependencies": {
+    "react-snap": "^1.23.0"
+  },
+  "reactSnap": {
+    "source": "example/dist",
+    "puppeteerArgs": [
+      "--no-sandbox",
+      "--disable-setuid-sandbox",
+      "--disable-dev-shm-usage",
+      "--single-process"
+    ]
+  }
+}

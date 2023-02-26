@@ -1,0 +1,64 @@
+name: 'react-snap Action'
+description: 'This Action uses react-snap to pre-render a web app into static HTML'
+inputs:
+  root:
+    description: 'The root directory of your application (where package.json is)'
+    required: true
+    default: 'example'
+  output:
+    description: 'The name of the output folder of your bundled application'
+    required: false
+    default: 'dist'
+branding:
+  icon: 'camera'  
+  color: 'yellow'
+runs:
+  using: "composite"
+  steps:
+  - name: Checkout 🛎️
+    uses: actions/checkout@v3
+
+  - name: Set up environment for Puppeteer
+    shell: bash
+    run: |
+      sudo apt-get update
+      sudo apt-get install -yq gconf-service libasound2 libatk1.0-0 libc6 libcairo2 \
+        libcups2 libdbus-1-3 libexpat1 libfontconfig1 libgcc1 libgconf-2-4 \
+        libgdk-pixbuf2.0-0 libglib2.0-0 libgtk-3-0 libnspr4 libpango-1.0-0 \
+        libpangocairo-1.0-0 libstdc++6 libx11-6 libx11-xcb1 libxcb1 libxcomposite1 \
+        libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 \
+        libxss1 libxtst6 ca-certificates fonts-liberation libnss3 lsb-release \
+        xdg-utils wget
+  
+  - name: Install dependencies and build 🔧
+    shell: bash
+    run: |
+      npm install react-snap
+      npm run build
+
+  - name: Add react-snap configuration
+    id: info
+    uses: jaywcjlove/github-action-package@main
+    with:
+      path: ${{ inputs.root }}/package.json
+      data: |
+        {
+          "reactSnap": {
+            "source": "${{ inputs.output }}",
+            "puppeteerArgs": [
+              "--no-sandbox",
+              "--disable-setuid-sandbox",
+              "--disable-dev-shm-usage",
+              "--single-process"
+            ]}
+        }
+
+  - name: Pre-render application
+    shell: bash
+    run: npx react-snap
+
+  - name: Verify SSR
+    shell: bash
+    run: |
+      if grep -q 'Client says hello!' ${{ inputs.root }}/${{ inputs.output }}/index.html; \
+      then exit 0; else exit 1; fi
