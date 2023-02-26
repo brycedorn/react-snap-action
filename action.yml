@@ -1,19 +1,19 @@
-name: 'react-snap Action'
-description: 'This Action uses react-snap to pre-render a web app into static HTML'
+name: react-snap Action
+description: This action uses react-snap to pre-render a web application into static, hydratable HTML
 inputs:
   root:
-    description: 'The root directory of your application (where package.json is)'
+    description: The root directory of your application (where package.json is)
     required: true
-    default: 'example'
+    default: example
   output:
-    description: 'The name of the output folder of your bundled application'
+    description: The name of the output folder of your bundled application
     required: false
-    default: 'dist'
+    default: dist
 branding:
-  icon: 'camera'  
-  color: 'yellow'
+  icon: camera
+  color: yellow
 runs:
-  using: "composite"
+  using: composite
   steps:
   - name: Checkout 🛎️
     uses: actions/checkout@v3
@@ -32,6 +32,7 @@ runs:
   
   - name: Install dependencies and build 🔧
     shell: bash
+    working-directory: ${{ inputs.root }}
     run: |
       npm install react-snap
       npm run build
@@ -55,10 +56,5 @@ runs:
 
   - name: Pre-render application
     shell: bash
+    working-directory: ${{ inputs.root }}
     run: npx react-snap
-
-  - name: Verify SSR
-    shell: bash
-    run: |
-      if grep -q 'Client says hello!' ${{ inputs.root }}/${{ inputs.output }}/index.html; \
-      then exit 0; else exit 1; fi
