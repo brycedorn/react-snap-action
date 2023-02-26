@@ -10,7 +10,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Server-side render
-        uses: brycedorn/react-snap-action@v1
+        uses: brycedorn/react-snap-action@main
         with:
           root: example
           output: dist
@@ -18,5 +18,5 @@ jobs:
       - name: Verify SSR 🕵️
         shell: bash
         run: |
-          if grep -q 'Client says hello!' ${{ inputs.root }}/${{ inputs.output }}/index.html; \
+          if grep -q 'Client says hello!' example/dist/index.html; \
           then exit 0; else exit 1; fi

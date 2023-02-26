@@ -1,6 +1,6 @@
 {
   "name": "react-snap-action",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "This Action uses react-snap to pre-render a web app into static HTML.",
   "main": "index.js",
   "scripts": {
